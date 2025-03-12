@@ -7,6 +7,8 @@ I spent way too long trying to get the emojis to render :(
 
 For my first idea, I decided to solve a simpler version of the problem, ignoring the exponential distribution. Instead, I guaranteed that every query would reach its desired node by creating a big cycle. This idea achieved a score of a bit over 200.
 
+After running this, I notice that there are very few distinct nodes that are actually queried, so there is really no need to search over a very large cycle. Instead, we could have a small cycle consisting of the relevant nodes, and have all the unnecessary nodes feed into the cycle. This increases our score to around 470.
+
 
 ### Optimization Strategy
 

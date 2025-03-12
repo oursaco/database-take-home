@@ -122,15 +122,33 @@ def optimize_graph(
     # sophisticated strategy based on query analysis!
     # ---------------------------------------------------------------
 
-    # Create a copy of the initial graph to modify
-    nodes = []
+    node_list = []
+    important_nodes = {}
+
+    # gets nodes that were queried
+    for res in results['detailed_results']:
+        node = str(res['target'])
+        if not node in important_nodes:
+            important_nodes[node] = 0
+        important_nodes[node] += 1
+
     optimized_graph = {}
+    # creates list of all nodes
     for node, edges in initial_graph.items():
-        nodes.append(node)
+        node_list.append(node)
         optimized_graph[node] = dict()
 
-    for i in range(len(nodes)):
-        optimized_graph[nodes[i]][nodes[(i + 1)%len(nodes)]] = 1
+    # create small cycle
+    important_nodes_list = [key for key, value in important_nodes.items()]
+    for i in range(len(important_nodes_list)):
+        u = important_nodes_list[i]
+        v = important_nodes_list[(i + 1)%len(important_nodes_list)]
+        optimized_graph[u][v] = 1
+
+    # feed other nodes into small cycle
+    for i in node_list:
+        if not i in important_nodes:
+            optimized_graph[i][important_nodes_list[0]] = 1
 
 
     # =============================================================
