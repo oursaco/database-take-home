@@ -150,7 +150,8 @@ def optimize_graph(
     # create small cycle of important nodes
     important_node_list = [key for key, value in important_nodes.items()]
 
-    sorted(important_node_list, key = lambda x : -important_nodes[x])
+    important_node_list.sort(key = lambda x : -important_nodes[x])
+    print(important_node_list)
 
     for i in range(len(important_node_list)):
         u = important_node_list[i]

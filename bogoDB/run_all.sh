@@ -47,5 +47,10 @@ else
     echo ""
 fi
 
+# Step 3: Visualize the query distribution
+echo -e "${GREEN}3. Visualizing query distribution...${NC}"
+python3 scripts/visualize_results.py
+echo ""
+
 echo -e "${BLUE}===== Pipeline Completed! =====${NC}"
 echo "Check the 'data' directory for results and visualizations." 

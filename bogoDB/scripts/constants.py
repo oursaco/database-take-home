@@ -30,6 +30,7 @@ DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 INITIAL_GRAPH_FILE = os.path.join(DATA_DIR, "initial_graph.json")
 QUERIES_FILE = os.path.join(DATA_DIR, "queries.json")
 INITIAL_RESULTS_FILE = os.path.join(DATA_DIR, "initial_results.json")
+OPTIMIZED_RESULTS_FILE = os.path.join(DATA_DIR, "optimized_results.json")
 EVALUATION_RESULTS_FILE = os.path.join(DATA_DIR, "evaluation_results.json")
 
 # Random seed for reproducibility

@@ -94,7 +94,7 @@ def visualize_query_distribution(queries_file=QUERIES_FILE):
     return query_counts
 
 
-def visualize_path_distribution(results_file=INITIAL_RESULTS_FILE):
+def visualize_path_distribution(results_file=OPTIMIZED_RESULTS_FILE):
     """
     Visualize path length distribution from results.
 
