@@ -122,34 +122,55 @@ def optimize_graph(
     # sophisticated strategy based on query analysis!
     # ---------------------------------------------------------------
 
-    node_list = []
-    important_nodes = {}
-
     # gets nodes that were queried
+    important_nodes = {}
+    total_queries = 0
+
     for res in results['detailed_results']:
         node = str(res['target'])
         if not node in important_nodes:
             important_nodes[node] = 0
         important_nodes[node] += 1
+        total_queries += 1
 
+    # initialize optimized graph
     optimized_graph = {}
-    # creates list of all nodes
-    for node, edges in initial_graph.items():
-        node_list.append(node)
-        optimized_graph[node] = dict()
 
-    # create small cycle
-    important_nodes_list = [key for key, value in important_nodes.items()]
-    for i in range(len(important_nodes_list)):
-        u = important_nodes_list[i]
-        v = important_nodes_list[(i + 1)%len(important_nodes_list)]
+    for node, edges in initial_graph.items():
+        optimized_graph[node] = dict()
+    
+    # create list of unnecessary nodes
+    unnecessary_node_list = []
+
+    for node, edges in initial_graph.items():
+        if not node in important_nodes:
+            unnecessary_node_list.append(node)
+
+
+    # create small cycle of important nodes
+    important_node_list = [key for key, value in important_nodes.items()]
+
+    sorted(important_node_list, key = lambda x : -important_nodes[x])
+
+    for i in range(len(important_node_list)):
+        u = important_node_list[i]
+        v = important_node_list[(i + 1)%len(important_node_list)]
         optimized_graph[u][v] = 1
 
-    # feed other nodes into small cycle
-    for i in node_list:
-        if not i in important_nodes:
-            optimized_graph[i][important_nodes_list[0]] = 1
-
+    # # feed other nodes into small cycle
+    # unnecessary_node_count = len(unnecessary_node_list)
+    # for i in important_node_list:
+    #     ratio = important_nodes[i]/total_queries # we want to have 'ratio' of the unnecessary nodes pointing to i
+    #     used = 0
+    #     # add the correct number of unnecessary nodes pointing to i
+    #     while used < ratio*unnecessary_node_count and len(unnecessary_node_list) > 0:
+    #         x = unnecessary_node_list[-1]
+    #         unnecessary_node_list.pop()
+    #         optimized_graph[x][i] = 1
+    #         used += 1
+    # # if we have leftovers due to precision, just distribute them according to the most important one
+    for i in unnecessary_node_list:
+        optimized_graph[i][important_node_list[0]] = 1
 
     # =============================================================
     # End of your implementation
