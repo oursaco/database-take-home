@@ -146,33 +146,41 @@ def optimize_graph(
         if not node in important_nodes:
             unnecessary_node_list.append(node)
 
-
-    # create small cycle of important nodes
+    # order nodes by occurence
     important_node_list = [key for key, value in important_nodes.items()]
-
     important_node_list.sort(key = lambda x : -important_nodes[x])
-    print(important_node_list)
 
-    for i in range(len(important_node_list)):
-        u = important_node_list[i]
-        v = important_node_list[(i + 1)%len(important_node_list)]
-        optimized_graph[u][v] = 1
+    # split important nodes into 3 chains, ignoring most occuring node
 
-    # # feed other nodes into small cycle
-    # unnecessary_node_count = len(unnecessary_node_list)
-    # for i in important_node_list:
-    #     ratio = important_nodes[i]/total_queries # we want to have 'ratio' of the unnecessary nodes pointing to i
-    #     used = 0
-    #     # add the correct number of unnecessary nodes pointing to i
-    #     while used < ratio*unnecessary_node_count and len(unnecessary_node_list) > 0:
-    #         x = unnecessary_node_list[-1]
-    #         unnecessary_node_list.pop()
-    #         optimized_graph[x][i] = 1
-    #         used += 1
-    # # if we have leftovers due to precision, just distribute them according to the most important one
+    chain_lengths = [len(important_node_list)//2, len(important_node_list)//4]
+
+    chains = [[], [], []]
+
+    for i in range(1, chain_lengths[0]):
+        chains[0].append(important_node_list[i])
+    for i in range(chain_lengths[0], chain_lengths[0] + chain_lengths[1]):
+        chains[1].append(important_node_list[i])
+    for i in range(chain_lengths[0] + chain_lengths[1], len(important_node_list)):
+        chains[2].append(important_node_list[i])
+
+    # add edges for each chain and link the end to most occuring node
+    for i in range(3):
+        print(chains[i])
+        for j in range(len(chains[i]) - 1):
+            u = chains[i][j]
+            v = chains[i][j + 1]
+            optimized_graph[u][v] = 1
+        optimized_graph[chains[i][-1]][important_node_list[0]] = 1
+
+    # add edges from most occuring nodes to chains, should be weighted
+    optimized_graph[important_node_list[0]][chains[0][0]] = 10
+    optimized_graph[important_node_list[0]][chains[1][0]] = 1
+    optimized_graph[important_node_list[0]][chains[2][0]] = 1
+
+    # feed all unnecessary nodes into most important node
     for i in unnecessary_node_list:
         optimized_graph[i][important_node_list[0]] = 1
-
+    
     # =============================================================
     # End of your implementation
     # =============================================================
