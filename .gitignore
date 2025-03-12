@@ -1,5 +1,10 @@
 venv/*
 __pycache__/*
+bogoDB/data/initial_graph.json
+bogoDB/data/initial_results.json
+bogoDB/data/optimized_results.json
+bogoDB/data/queries.json
+bogoDB/candidate_submission/optimized_graph.json
 *.pyc
 *.pyo
 *.pyd

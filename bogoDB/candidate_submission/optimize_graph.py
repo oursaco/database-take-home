@@ -93,11 +93,6 @@ def optimize_graph(
     """
     print("Starting graph optimization...")
 
-    # Create a copy of the initial graph to modify
-    optimized_graph = {}
-    for node, edges in initial_graph.items():
-        optimized_graph[node] = dict(edges)
-
     # =============================================================
     # TODO: Implement your optimization strategy here
     # =============================================================
@@ -127,35 +122,16 @@ def optimize_graph(
     # sophisticated strategy based on query analysis!
     # ---------------------------------------------------------------
 
-    # Count total edges in the initial graph
-    total_edges = sum(len(edges) for edges in optimized_graph.values())
+    # Create a copy of the initial graph to modify
+    nodes = []
+    optimized_graph = {}
+    for node, edges in initial_graph.items():
+        nodes.append(node)
+        optimized_graph[node] = dict()
 
-    # If we exceed the limit, we need to prune edges
-    if total_edges > max_total_edges:
-        print(
-            f"Initial graph has {total_edges} edges, need to remove {total_edges - max_total_edges}"
-        )
+    for i in range(len(nodes)):
+        optimized_graph[nodes[i]][nodes[(i + 1)%len(nodes)]] = 1
 
-        # Example pruning logic (replace with your optimized strategy)
-        edges_to_remove = total_edges - max_total_edges
-        removed = 0
-
-        # Sort nodes by number of outgoing edges (descending)
-        nodes_by_edge_count = sorted(
-            optimized_graph.keys(), key=lambda n: len(optimized_graph[n]), reverse=True
-        )
-
-        # Remove edges from nodes with the most connections first
-        for node in nodes_by_edge_count:
-            if removed >= edges_to_remove:
-                break
-
-            # As a simplistic example, remove the edge with lowest weight
-            if len(optimized_graph[node]) > 1:  # Ensure node keeps at least one edge
-                # Find edge with minimum weight
-                min_edge = min(optimized_graph[node].items(), key=lambda x: x[1])
-                del optimized_graph[node][min_edge[0]]
-                removed += 1
 
     # =============================================================
     # End of your implementation

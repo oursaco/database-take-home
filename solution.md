@@ -1,9 +1,12 @@
 
 ## Solution 
 
+I spent way too long trying to get the emojis to render :(
+
 ### Approach & Analysis
 
-[Describe how you analyzed the query patterns and what insights you found]
+For my first idea, I decided to solve a simpler version of the problem, ignoring the exponential distribution. Instead, I guaranteed that every query would reach its desired node by creating a big cycle. This idea achieved a score of a bit over 200.
+
 
 ### Optimization Strategy
 
